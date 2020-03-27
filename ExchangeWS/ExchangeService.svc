@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="ExchangeWS.ExchangeService" CodeBehind="ExchangeService.svc.cs" %>
