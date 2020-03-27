@@ -1,33 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ExchangeWS.SerializableClasses;
+using System;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
 
 namespace ExchangeWS
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class ExchangeService : IExchangeService
     {
-        public string GetData(int value)
+        public ExchangeRateType GetExchangeRateForCurrency(string currencyCode)
         {
-            return string.Format("You entered: {0}", value);
+            if (currencyCode == null)
+            {
+                throw new ArgumentNullException("currencyCode");
+            }
+
+            
+            RestNBPService.RestNBPService r = RestNBPService.RestNBPService.Instance;
+            ExchangeRates ers = r.GetExchangeRate(currencyCode);
+            if (ers == null)
+            {
+                throw new Exception("There is no exchange rate for such currency code");
+            }
+            return convertRestNBPResponse(ers);
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        public ExchangeRateType convertRestNBPResponse(ExchangeRates ers)
         {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+            ExchangeRateType e = new ExchangeRateType();
+            e.Currency = ers.currency;
+            e.Code = ers.code;
+            e.Date = ers.rates.FirstOrDefault<Rate>().effectiveDate;
+            e.Rate = ers.rates.FirstOrDefault<Rate>().mid;
+
+            return e;
         }
     }
 }
