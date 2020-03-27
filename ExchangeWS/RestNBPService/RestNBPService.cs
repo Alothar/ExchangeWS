@@ -1,4 +1,5 @@
 ﻿using ExchangeWS.SerializableClasses;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 
@@ -16,15 +17,14 @@ namespace ExchangeWS.RestNBPService
             };
         }
 
-        public ExchangeRatesSeries GetExchangeRate(String currencyCode)
+        public ExchangeRates GetExchangeRate(String currencyCode)
         {
-            ExchangeRatesSeries e = new ExchangeRatesSeries();
+            ExchangeRates e = new ExchangeRates();
             System.Threading.Tasks.Task<HttpResponseMessage> t = _client.GetAsync(_client.BaseAddress + "exchangerates/rates/a/" + currencyCode);
             if (t.Result.IsSuccessStatusCode)
             {
-                System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(typeof(ExchangeRatesSeries));
-                System.IO.StreamReader sr = new System.IO.StreamReader(t.Result.Content.ReadAsStringAsync().Result);
-                e = (ExchangeRatesSeries)ser.Deserialize(sr);
+                string result = t.Result.Content.ReadAsStringAsync().Result;
+                e = JsonConvert.DeserializeObject<ExchangeRates>(result);
             }
             return e;
         }
