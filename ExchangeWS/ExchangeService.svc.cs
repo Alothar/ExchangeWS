@@ -16,7 +16,7 @@ namespace ExchangeWS
             
             RestNBPService.RestNBPService r = RestNBPService.RestNBPService.Instance;
             ExchangeRates ers = r.GetExchangeRate(currencyCode);
-            if (ers == null)
+            if (ers.code == null)
             {
                 throw new Exception("There is no exchange rate for such currency code");
             }
