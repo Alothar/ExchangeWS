@@ -1,11 +1,16 @@
 ﻿using ExchangeWS.SerializableClasses;
+using ExchangeWS.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 
 namespace ExchangeWS
 {
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class ExchangeService : IExchangeService
     {
+        static readonly IExchangeRateTypeService exchangeRateService = new ExchangeRateTypeService(new ExchangeRateTypeRepository());
         public ExchangeRateType GetExchangeRateForCurrency(string currencyCode)
         {
             if (currencyCode == null)
@@ -32,6 +37,11 @@ namespace ExchangeWS
             e.Rate = ers.rates.FirstOrDefault<Rate>().mid;
 
             return e;
+        }
+
+        public List<ExchangeRateType> GetExchangeRateTypes()
+        {
+            return exchangeRateService.GetData().ToList();
         }
     }
 }

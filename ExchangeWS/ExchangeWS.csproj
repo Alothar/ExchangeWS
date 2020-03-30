@@ -76,6 +76,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestNBPService\RestNBPService.cs" />
     <Compile Include="SerializableClasses\ExchangeRates.cs" />
+    <Compile Include="Services\ExchangeRateTypeRepository.cs" />
+    <Compile Include="Services\ExchangeRateTypeService.cs" />
+    <Compile Include="Services\IExchangeRateTypeRepository.cs" />
+    <Compile Include="Services\IExchangeRateTypeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

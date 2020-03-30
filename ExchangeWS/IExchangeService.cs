@@ -13,6 +13,9 @@ namespace ExchangeWS
     {
         [OperationContract]
         ExchangeRateType GetExchangeRateForCurrency(string currencyCode);
+
+        [OperationContract]
+        List<ExchangeRateType> GetExchangeRateTypes();
     }
 
     [DataContract]
